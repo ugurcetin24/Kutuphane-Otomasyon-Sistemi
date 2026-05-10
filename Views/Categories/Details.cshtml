@@ -1,0 +1,76 @@
+@model KutuphaneSistemi.Models.Category
+
+@{
+    ViewData["Title"] = "Kategori Detayı";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>🏷️ Kategori Detayı</h2>
+    <a asp-action="Index" class="btn btn-secondary">← Listeye Dön</a>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header bg-dark text-white">
+        <h4 class="mb-0">@Model.Name</h4>
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Kategori Adı</dt>
+            <dd class="col-sm-9">@Model.Name</dd>
+
+            <dt class="col-sm-3">Açıklama</dt>
+            <dd class="col-sm-9">@(Model.Description ?? "-")</dd>
+        </dl>
+    </div>
+    <div class="card-footer">
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Düzenle</a>
+        <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger ms-2">Sil</a>
+    </div>
+</div>
+
+<!-- Kategoriye ait kitaplar -->
+<h4>Bu Kategorideki Kitaplar <span class="badge bg-warning text-dark">@Model.Books.Count</span></h4>
+
+@if (!Model.Books.Any())
+{
+    <div class="alert alert-info">Bu kategoriye ait kitap bulunmamaktadır.</div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered align-middle">
+            <thead>
+                <tr>
+                    <th>Kitap Adı</th>
+                    <th>Yazar</th>
+                    <th>Yayın Yılı</th>
+                    <th>Durum</th>
+                    <th>İşlem</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var kitap in Model.Books)
+                {
+                    <tr>
+                        <td class="fw-semibold">@kitap.Title</td>
+                        <td>@kitap.Author?.FullName</td>
+                        <td>@kitap.PublicationYear</td>
+                        <td>
+                            @if (kitap.IsAvailable)
+                            {
+                                <span class="badge bg-success">Müsait</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">Ödünçte</span>
+                            }
+                        </td>
+                        <td>
+                            <a asp-controller="Books" asp-action="Details" asp-route-id="@kitap.Id" class="btn btn-sm btn-info text-white">Detay</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

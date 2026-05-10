@@ -1,0 +1,60 @@
+@model KutuphaneSistemi.Models.Author
+
+@{
+    ViewData["Title"] = "Yazar Sil";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>🗑️ Yazar Sil</h2>
+    <a asp-action="Index" class="btn btn-secondary">← Listeye Dön</a>
+</div>
+
+<div class="alert alert-warning">
+    <strong>Dikkat!</strong> Bu yazarı silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.
+</div>
+
+@if (Model.Books.Any())
+{
+    <div class="alert alert-danger">
+        <strong>⚠️ Uyarı:</strong> Bu yazara ait <strong>@Model.Books.Count</strong> kitap bulunmaktadır.
+        Önce bu kitapları silin veya başka bir yazara atayın, ardından yazarı silebilirsiniz.
+    </div>
+}
+
+<div class="card">
+    <div class="card-header bg-danger text-white">
+        <h5 class="mb-0">Silinecek Yazar Bilgileri</h5>
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Ad Soyad</dt>
+            <dd class="col-sm-9 fw-bold">@Model.FullName</dd>
+
+            <dt class="col-sm-3">Ülke</dt>
+            <dd class="col-sm-9">@(Model.Country ?? "-")</dd>
+
+            <dt class="col-sm-3">Doğum Yılı</dt>
+            <dd class="col-sm-9">@(Model.BirthYear?.ToString() ?? "-")</dd>
+
+            <dt class="col-sm-3">Kitap Sayısı</dt>
+            <dd class="col-sm-9">
+                <span class="badge bg-@(Model.Books.Any() ? "danger" : "success")">@Model.Books.Count kitap</span>
+            </dd>
+        </dl>
+    </div>
+    <div class="card-footer">
+        @if (!Model.Books.Any())
+        {
+            <form asp-action="Delete" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="Id" />
+                <button type="submit" class="btn btn-danger">Evet, Sil</button>
+                <a asp-action="Index" class="btn btn-secondary ms-2">Vazgeç</a>
+            </form>
+        }
+        else
+        {
+            <a asp-action="Index" class="btn btn-secondary">Geri Dön</a>
+        }
+    </div>
+</div>

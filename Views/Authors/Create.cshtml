@@ -1,0 +1,54 @@
+@model KutuphaneSistemi.Models.Author
+
+@{
+    ViewData["Title"] = "Yeni Yazar Ekle";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>➕ Yeni Yazar Ekle</h2>
+    <a asp-action="Index" class="btn btn-secondary">← Listeye Dön</a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <form asp-action="Create" method="post">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label asp-for="FullName" class="form-label fw-semibold"></label>
+                    <input asp-for="FullName" class="form-control" placeholder="Yazar adını girin" />
+                    <span asp-validation-for="FullName" class="text-danger small"></span>
+                </div>
+
+                <div class="col-md-3">
+                    <label asp-for="BirthYear" class="form-label fw-semibold"></label>
+                    <input asp-for="BirthYear" class="form-control" placeholder="1950" />
+                    <span asp-validation-for="BirthYear" class="text-danger small"></span>
+                </div>
+
+                <div class="col-md-3">
+                    <label asp-for="Country" class="form-label fw-semibold"></label>
+                    <input asp-for="Country" class="form-control" placeholder="Türkiye" />
+                    <span asp-validation-for="Country" class="text-danger small"></span>
+                </div>
+
+                <div class="col-12">
+                    <label asp-for="Biography" class="form-label fw-semibold"></label>
+                    <textarea asp-for="Biography" class="form-control" rows="4" placeholder="Yazar hakkında kısa bilgi..."></textarea>
+                    <span asp-validation-for="Biography" class="text-danger small"></span>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <button type="submit" class="btn btn-success">💾 Kaydet</button>
+                <a asp-action="Index" class="btn btn-secondary ms-2">İptal</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

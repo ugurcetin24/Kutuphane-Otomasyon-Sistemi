@@ -1,0 +1,20 @@
+## .NET
+bin/
+obj/
+*.user
+*.suo
+.vs/
+*.userprefs
+
+## Logs
+*.log
+
+## OS
+.DS_Store
+Thumbs.db
+
+## Secrets (local overrides only)
+appsettings.Development.json
+
+## Claude Code
+.claude/

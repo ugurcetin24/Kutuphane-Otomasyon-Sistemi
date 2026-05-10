@@ -1,0 +1,71 @@
+@model KutuphaneSistemi.Models.Book
+
+@{
+    ViewData["Title"] = "Kitap Detayı";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>📖 Kitap Detayı</h2>
+    <a asp-action="Index" class="btn btn-secondary">← Listeye Dön</a>
+</div>
+
+<div class="card">
+    <div class="card-header bg-dark text-white">
+        <h4 class="mb-0">@Model.Title</h4>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <dl class="row">
+                    <dt class="col-sm-4">Kitap Adı</dt>
+                    <dd class="col-sm-8">@Model.Title</dd>
+
+                    <dt class="col-sm-4">ISBN</dt>
+                    <dd class="col-sm-8">@(Model.ISBN ?? "-")</dd>
+
+                    <dt class="col-sm-4">Yayın Yılı</dt>
+                    <dd class="col-sm-8">@(Model.PublicationYear?.ToString() ?? "-")</dd>
+
+                    <dt class="col-sm-4">Sayfa Sayısı</dt>
+                    <dd class="col-sm-8">@(Model.PageCount?.ToString() ?? "-")</dd>
+                </dl>
+            </div>
+            <div class="col-md-6">
+                <dl class="row">
+                    <dt class="col-sm-4">Raf Konumu</dt>
+                    <dd class="col-sm-8">@(Model.ShelfLocation ?? "-")</dd>
+
+                    <dt class="col-sm-4">Durum</dt>
+                    <dd class="col-sm-8">
+                        @if (Model.IsAvailable)
+                        {
+                            <span class="badge bg-success fs-6">✓ Müsait</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger fs-6">✗ Ödünçte</span>
+                        }
+                    </dd>
+
+                    <dt class="col-sm-4">Yazar</dt>
+                    <dd class="col-sm-8">
+                        <a asp-controller="Authors" asp-action="Details" asp-route-id="@Model.AuthorId">
+                            @Model.Author?.FullName
+                        </a>
+                    </dd>
+
+                    <dt class="col-sm-4">Kategori</dt>
+                    <dd class="col-sm-8">
+                        <a asp-controller="Categories" asp-action="Details" asp-route-id="@Model.CategoryId">
+                            @Model.Category?.Name
+                        </a>
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer">
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Düzenle</a>
+        <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger ms-2">Sil</a>
+    </div>
+</div>

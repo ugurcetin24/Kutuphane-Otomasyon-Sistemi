@@ -1,0 +1,124 @@
+@model IEnumerable<KutuphaneSistemi.Models.Book>
+
+@{
+    ViewData["Title"] = "Ana Sayfa";
+}
+
+<div class="text-center mb-4">
+    <h1 class="display-5 fw-bold">📚 Kütüphane Otomasyon Sistemi</h1>
+    <p class="lead text-muted">Kitaplarınızı, yazarlarınızı ve kategorilerinizi kolayca yönetin.</p>
+</div>
+
+<!-- İstatistik kartları -->
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="card text-center h-100 border-0 shadow-sm">
+            <div class="card-body">
+                <div class="display-4 text-primary fw-bold">@ViewBag.ToplamKitap</div>
+                <h5 class="card-title text-muted mt-2">Toplam Kitap</h5>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center h-100 border-0 shadow-sm">
+            <div class="card-body">
+                <div class="display-4 text-success fw-bold">@ViewBag.ToplamYazar</div>
+                <h5 class="card-title text-muted mt-2">Toplam Yazar</h5>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center h-100 border-0 shadow-sm">
+            <div class="card-body">
+                <div class="display-4 text-warning fw-bold">@ViewBag.ToplamKategori</div>
+                <h5 class="card-title text-muted mt-2">Toplam Kategori</h5>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-6">
+        <div class="card text-center h-100 border-0 shadow-sm">
+            <div class="card-body">
+                <div class="display-5 text-success fw-bold">@ViewBag.MüsaitKitap</div>
+                <h5 class="card-title text-muted mt-2">✓ Müsait Kitap</h5>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card text-center h-100 border-0 shadow-sm">
+            <div class="card-body">
+                <div class="display-5 text-danger fw-bold">@ViewBag.MüsaitDegilKitap</div>
+                <h5 class="card-title text-muted mt-2">✗ Ödünçte Olan Kitap</h5>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Hızlı erişim butonları -->
+<div class="row g-3 mb-5">
+    <div class="col-md-4">
+        <a asp-controller="Books" asp-action="Index" class="btn btn-primary btn-lg w-100">
+            📖 Kitaplara Git
+        </a>
+    </div>
+    <div class="col-md-4">
+        <a asp-controller="Authors" asp-action="Index" class="btn btn-success btn-lg w-100">
+            ✍️ Yazarlara Git
+        </a>
+    </div>
+    <div class="col-md-4">
+        <a asp-controller="Categories" asp-action="Index" class="btn btn-warning btn-lg w-100">
+            🏷️ Kategorilere Git
+        </a>
+    </div>
+</div>
+
+<!-- Son eklenen 5 kitap -->
+<h4 class="mb-3">Son Eklenen Kitaplar</h4>
+@if (!Model.Any())
+{
+    <div class="alert alert-info">Henüz kitap eklenmemiş.</div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered align-middle">
+            <thead>
+                <tr>
+                    <th>Kitap Adı</th>
+                    <th>Yazar</th>
+                    <th>Kategori</th>
+                    <th>Yayın Yılı</th>
+                    <th>Durum</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var kitap in Model)
+                {
+                    <tr>
+                        <td>
+                            <a asp-controller="Books" asp-action="Details" asp-route-id="@kitap.Id" class="text-decoration-none fw-semibold">
+                                @kitap.Title
+                            </a>
+                        </td>
+                        <td>@kitap.Author?.FullName</td>
+                        <td>@kitap.Category?.Name</td>
+                        <td>@kitap.PublicationYear</td>
+                        <td>
+                            @if (kitap.IsAvailable)
+                            {
+                                <span class="badge bg-success">Müsait</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">Ödünçte</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

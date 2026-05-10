@@ -1,0 +1,52 @@
+@model IEnumerable<KutuphaneSistemi.Models.Author>
+
+@{
+    ViewData["Title"] = "Yazarlar";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>✍️ Yazar Listesi</h2>
+    <a asp-action="Create" class="btn btn-success">+ Yeni Yazar Ekle</a>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        <strong>Bilgi:</strong> Henüz yazar eklenmemiş.
+        <a asp-action="Create">İlk yazarı ekleyin.</a>
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered align-middle">
+            <thead>
+                <tr>
+                    <th>Ad Soyad</th>
+                    <th>Ülke</th>
+                    <th>Doğum Yılı</th>
+                    <th>Kitap Sayısı</th>
+                    <th>İşlemler</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var yazar in Model)
+                {
+                    <tr>
+                        <td class="fw-semibold">@yazar.FullName</td>
+                        <td>@(yazar.Country ?? "-")</td>
+                        <td>@(yazar.BirthYear?.ToString() ?? "-")</td>
+                        <td>
+                            <span class="badge bg-primary rounded-pill">@yazar.Books.Count</span>
+                        </td>
+                        <td>
+                            <a asp-action="Details" asp-route-id="@yazar.Id" class="btn btn-sm btn-info text-white">Detay</a>
+                            <a asp-action="Edit" asp-route-id="@yazar.Id" class="btn btn-sm btn-warning">Düzenle</a>
+                            <a asp-action="Delete" asp-route-id="@yazar.Id" class="btn btn-sm btn-danger">Sil</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

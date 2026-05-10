@@ -1,0 +1,82 @@
+@model KutuphaneSistemi.Models.Author
+
+@{
+    ViewData["Title"] = "Yazar Detayı";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>✍️ Yazar Detayı</h2>
+    <a asp-action="Index" class="btn btn-secondary">← Listeye Dön</a>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header bg-dark text-white">
+        <h4 class="mb-0">@Model.FullName</h4>
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Ad Soyad</dt>
+            <dd class="col-sm-9">@Model.FullName</dd>
+
+            <dt class="col-sm-3">Doğum Yılı</dt>
+            <dd class="col-sm-9">@(Model.BirthYear?.ToString() ?? "-")</dd>
+
+            <dt class="col-sm-3">Ülke</dt>
+            <dd class="col-sm-9">@(Model.Country ?? "-")</dd>
+
+            <dt class="col-sm-3">Biyografi</dt>
+            <dd class="col-sm-9">@(Model.Biography ?? "-")</dd>
+        </dl>
+    </div>
+    <div class="card-footer">
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Düzenle</a>
+        <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger ms-2">Sil</a>
+    </div>
+</div>
+
+<!-- Yazara ait kitaplar -->
+<h4>Bu Yazarın Kitapları <span class="badge bg-primary">@Model.Books.Count</span></h4>
+
+@if (!Model.Books.Any())
+{
+    <div class="alert alert-info">Bu yazara ait kitap bulunmamaktadır.</div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered align-middle">
+            <thead>
+                <tr>
+                    <th>Kitap Adı</th>
+                    <th>Kategori</th>
+                    <th>Yayın Yılı</th>
+                    <th>Durum</th>
+                    <th>İşlem</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var kitap in Model.Books)
+                {
+                    <tr>
+                        <td class="fw-semibold">@kitap.Title</td>
+                        <td>@kitap.Category?.Name</td>
+                        <td>@kitap.PublicationYear</td>
+                        <td>
+                            @if (kitap.IsAvailable)
+                            {
+                                <span class="badge bg-success">Müsait</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">Ödünçte</span>
+                            }
+                        </td>
+                        <td>
+                            <a asp-controller="Books" asp-action="Details" asp-route-id="@kitap.Id" class="btn btn-sm btn-info text-white">Detay</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
