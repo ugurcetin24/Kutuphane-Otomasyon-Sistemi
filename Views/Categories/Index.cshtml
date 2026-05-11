@@ -4,47 +4,70 @@
     ViewData["Title"] = "Kategoriler";
 }
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h2>🏷️ Kategori Listesi</h2>
-    <a asp-action="Create" class="btn btn-warning">+ Yeni Kategori Ekle</a>
+<div class="d-flex justify-content-between align-items-center mb-3 mt-2">
+    <h2 class="fw-bold mb-0"><i class="bi bi-tags me-2 text-warning"></i>Kategori Listesi</h2>
+    <a asp-action="Create" class="btn btn-warning">
+        <i class="bi bi-plus-circle me-1"></i>Yeni Kategori Ekle
+    </a>
 </div>
 
 @if (!Model.Any())
 {
-    <div class="alert alert-info">
-        <strong>Bilgi:</strong> Henüz kategori eklenmemiş.
-        <a asp-action="Create">İlk kategoriyi ekleyin.</a>
+    <div class="alert alert-info d-flex align-items-center" role="alert">
+        <i class="bi bi-info-circle-fill me-3 fs-4"></i>
+        <div>
+            <strong>Bilgi:</strong> Henüz kategori eklenmemiş.
+            <a asp-action="Create" class="ms-1">İlk kategoriyi ekleyin.</a>
+        </div>
     </div>
 }
 else
 {
-    <div class="table-responsive">
-        <table class="table table-hover table-bordered align-middle">
-            <thead>
-                <tr>
-                    <th>Kategori Adı</th>
-                    <th>Açıklama</th>
-                    <th>Kitap Sayısı</th>
-                    <th>İşlemler</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var kategori in Model)
-                {
+    <div class="tablo-kap">
+        <div class="table-responsive">
+            <table class="table table-hover table-striped align-middle">
+                <thead>
                     <tr>
-                        <td class="fw-semibold">@kategori.Name</td>
-                        <td>@(kategori.Description ?? "-")</td>
-                        <td>
-                            <span class="badge bg-warning text-dark rounded-pill">@kategori.Books.Count</span>
-                        </td>
-                        <td>
-                            <a asp-action="Details" asp-route-id="@kategori.Id" class="btn btn-sm btn-info text-white">Detay</a>
-                            <a asp-action="Edit" asp-route-id="@kategori.Id" class="btn btn-sm btn-warning">Düzenle</a>
-                            <a asp-action="Delete" asp-route-id="@kategori.Id" class="btn btn-sm btn-danger">Sil</a>
-                        </td>
+                        <th><i class="bi bi-tag me-1"></i>Kategori Adı</th>
+                        <th><i class="bi bi-card-text me-1"></i>Açıklama</th>
+                        <th><i class="bi bi-book me-1"></i>Kitap Sayısı</th>
+                        <th>İşlemler</th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var kategori in Model)
+                    {
+                        <tr>
+                            <td class="fw-semibold">
+                                <i class="bi bi-folder2 text-warning me-2"></i>@kategori.Name
+                            </td>
+                            <td class="text-muted">@(kategori.Description ?? "—")</td>
+                            <td>
+                                <span class="badge bg-warning text-dark rounded-pill fs-6 px-3">
+                                    @kategori.Books.Count
+                                </span>
+                            </td>
+                            <td style="white-space:nowrap">
+                                <a asp-action="Details" asp-route-id="@kategori.Id"
+                                   class="btn btn-sm btn-outline-info btn-islem">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <a asp-action="Edit" asp-route-id="@kategori.Id"
+                                   class="btn btn-sm btn-outline-warning btn-islem">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@kategori.Id"
+                                   class="btn btn-sm btn-outline-danger btn-islem">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="mt-2 text-muted small">
+            <i class="bi bi-list-check me-1"></i>Toplam <strong>@Model.Count()</strong> kategori listeleniyor.
+        </div>
     </div>
 }

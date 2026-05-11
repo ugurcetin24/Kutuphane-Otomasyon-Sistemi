@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KutuphaneSistemi.Controllers
 {
-    // Ana sayfa denetleyicisi - Dashboard istatistiklerini gösterir
     public class HomeController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -16,14 +15,22 @@ namespace KutuphaneSistemi.Controllers
 
         public async Task<IActionResult> Index()
         {
-            // LINQ ile veritabanından istatistik verilerini çek
+            // İstatistik verileri
             ViewBag.ToplamKitap = await _context.Books.CountAsync();
             ViewBag.ToplamYazar = await _context.Authors.CountAsync();
             ViewBag.ToplamKategori = await _context.Categories.CountAsync();
             ViewBag.MüsaitKitap = await _context.Books.CountAsync(b => b.IsAvailable);
             ViewBag.MüsaitDegilKitap = await _context.Books.CountAsync(b => !b.IsAvailable);
 
-            // Son eklenen 5 kitabı göster
+            // Öne çıkan 4 kitap (en eski eklenenler - istikrarlı görünüm için)
+            ViewBag.OncuKitaplar = await _context.Books
+                .Include(b => b.Author)
+                .Include(b => b.Category)
+                .OrderBy(b => b.Id)
+                .Take(4)
+                .ToListAsync();
+
+            // Son eklenen 5 kitap (model olarak geçirilir)
             var sonKitaplar = await _context.Books
                 .Include(b => b.Author)
                 .Include(b => b.Category)
